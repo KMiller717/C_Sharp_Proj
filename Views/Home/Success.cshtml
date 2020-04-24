@@ -1,0 +1,55 @@
+@model List<Wedding>
+
+<h2>Welcome to the Activity Center!</h2>
+<h4>Welcome @ViewBag.User.FirstName</h4>
+
+<a href="/">Home</a>
+
+<a href="/logout">Log Out</a>
+
+
+<table class="table">
+    <thead>
+        <th>Activity</th>
+        <th>Date & Time</th>
+        <th>Duration</th>
+        <th>Event Coordinator</th>
+        <th>Number of Participants</th>
+        <th>Actions</th>
+    </thead>
+    <tbody>
+        @foreach (var w in Model)
+        {
+        @if (@w.Date > DateTime.Today)
+            { 
+        <tr>
+            <td><a href="/view/@w.WeddingId">@w.Title</a></td>
+            <td>@w.Date</td>
+            <td>@w.Duration @w.TimeLabel</td>
+            <td>@w.Creator.FirstName</td>
+            <td>@w.Attendees.Count</td>
+            <td>
+                @if (w.Creator.UserId == ViewBag.User.UserId)
+                {
+                <a href="/cancel/@w.WeddingId">Cancel</a>
+                }
+                else
+                {
+                    if (w.Attendees.Any( u => u.UserId == ViewBag.User.UserId))
+                    {
+                        <a href="/leave/@w.WeddingId/@ViewBag.User.UserId">Leave</a>
+                    }
+                    else 
+                    {
+                        <a href="/join/@w.WeddingId/@ViewBag.User.UserId">Join</a>
+                    } 
+                }
+            </td>
+        </tr>
+            }
+        }
+
+    </tbody>
+</table>
+
+<button class="btn btn-success"><a href="/addevent">Add Event</a></button>

@@ -1,0 +1,30 @@
+@model Wedding
+
+<a href="/Success">Go Back to Dashboard</a>
+<a href="/logout">Log Out</a>
+
+<h1>@Model.Title</h1>
+<h4>Event Coordinator: @Model.Creator.FirstName </h4>
+
+<p>Event Date: @Model.Date</p>
+<p>Description: @Model.Description</p>
+<p>List of Attendees</p>
+
+@foreach( var a in Model.Attendees)
+{
+    <li>@a.Guest.FirstName</li>
+}
+
+@if (Model.Attendees.Any( u => u.UserId == ViewBag.User.UserId))
+    {
+                    <a href="/leave/@Model.WeddingId/@ViewBag.User.UserId">Leave</a>
+                }
+                else 
+                {
+                <a href="/join/@Model.WeddingId/@ViewBag.User.UserId">Join</a>
+                }
+
+@if (@Model.Creator.UserId == ViewBag.User.UserId)
+{
+    <a href="/cancel/@Model.WeddingId">Cancel</a>
+}
